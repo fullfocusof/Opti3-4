@@ -1,0 +1,5 @@
+﻿  SymplexInterraction.cpp
+D:\Projects\Optimization\LR4\SymplexInterraction.cpp(123,13): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Optimization\LR4\SymplexInterraction.cpp(311,15): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Optimization\LR4\SymplexInterraction.cpp(312,19): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  LR4.vcxproj -> D:\Projects\Optimization\LR4\x64\Debug\LR4.exe
