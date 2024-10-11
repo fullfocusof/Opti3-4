@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\Projects\\Optimization\\LR4\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\SymplexInterraction.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|solutionrelative:SymplexInterraction.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\dataInput.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|solutionrelative:dataInput.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|solutionrelative:Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\SymplexInterraction.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|solutionrelative:SymplexInterraction.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\dataOutput.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\SymplexInterraction.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|solutionrelative:SymplexInterraction.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\dataInput.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|solutionrelative:dataInput.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{74420F53-9AB9-4703-BAE5-4A7D33D714E1}|LR4.vcxproj|D:\\Projects\\Optimization\\LR4\\RFraction.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
@@ -50,8 +50,7 @@
               "RelativeToolTip": "RFraction.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-10-06T15:22:20.659Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-06T15:22:20.659Z"
             },
             {
               "$type": "Document",
@@ -61,33 +60,33 @@
               "RelativeDocumentMoniker": "RFraction.cpp",
               "ToolTip": "D:\\Projects\\Optimization\\LR4\\RFraction.cpp",
               "RelativeToolTip": "RFraction.cpp",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAUwEgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAUwGEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-06T15:22:24.526Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "SymplexInterraction.h",
               "DocumentMoniker": "D:\\Projects\\Optimization\\LR4\\SymplexInterraction.h",
               "RelativeDocumentMoniker": "SymplexInterraction.h",
               "ToolTip": "D:\\Projects\\Optimization\\LR4\\SymplexInterraction.h",
               "RelativeToolTip": "SymplexInterraction.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-10-06T16:12:28.602Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "SymplexInterraction.cpp",
               "DocumentMoniker": "D:\\Projects\\Optimization\\LR4\\SymplexInterraction.cpp",
               "RelativeDocumentMoniker": "SymplexInterraction.cpp",
               "ToolTip": "D:\\Projects\\Optimization\\LR4\\SymplexInterraction.cpp",
               "RelativeToolTip": "SymplexInterraction.cpp",
-              "ViewState": "AgIAACcBAAAAAAAAAAAWwKYAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAmwG0AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-06T16:12:30.009Z",
               "EditorCaption": ""
@@ -100,14 +99,14 @@
               "RelativeDocumentMoniker": "Main.cpp",
               "ToolTip": "D:\\Projects\\Optimization\\LR4\\Main.cpp",
               "RelativeToolTip": "Main.cpp",
-              "ViewState": "AgIAAGsAAAAAAAAAAAAmwCoAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAmwJgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-06T15:19:25.329Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "dataInput.txt",
               "DocumentMoniker": "D:\\Projects\\Optimization\\LR4\\dataInput.txt",
               "RelativeDocumentMoniker": "dataInput.txt",
@@ -120,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "dataOutput.txt",
               "DocumentMoniker": "D:\\Projects\\Optimization\\LR4\\dataOutput.txt",
               "RelativeDocumentMoniker": "dataOutput.txt",

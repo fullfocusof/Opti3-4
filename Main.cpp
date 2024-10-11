@@ -43,7 +43,8 @@ int main()
 		{
 			"Импорт данных из файла",
 			"Просмотр данных",
-			"Итерация симплекс-метода",
+			"Очистка данных",
+			"Решить симплекс-методом",
 			"Выход"
 		};
 
@@ -131,8 +132,8 @@ int main()
 
 						try
 						{
-							test.symplexIteration("dataOutput.txt");
-							cout << "Итерация симплекс-метода проведена успешно";
+							test.clearData();
+							cout << "Данные успешно удалены";
 						}
 						catch (const exception& ex)
 						{
@@ -144,6 +145,25 @@ int main()
 					break;
 
 					case 3:
+					{
+						system("cls");
+
+						try
+						{
+							//test.isContradiction();
+							test.universalSymplex("dataOutput.txt");
+							cout << "Задача решена";
+						}
+						catch (const exception& ex)
+						{
+							cout << ex.what();
+						}
+
+						printQuit();
+					}
+					break;
+
+					case 4:
 					{
 						system("cls");
 						exitProg = true;

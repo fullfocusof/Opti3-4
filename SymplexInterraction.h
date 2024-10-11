@@ -25,17 +25,31 @@ public:
 
 	void readFromFile(string filename);
 	void printData();
+	void clearData();
+
+	void isContradiction();
 
 	void castToStandard(string filename);
 	void standardToFile(string filename);
-
-	vector<Fraction> isCanonical(string filename);
-
-	int findEnteringVar();
-	int findLeadRow(int leadColID);
-	void symplexIteration(string filename);
+	void standardToFile(string filename, vector<int> baseID, vector<int> rowBaseID);
+	void symplex2ToFile(string filename, pair<vector<Fraction>, Fraction>& subFunc);
 
 	Fraction getObjFuncValue(vector<Fraction>& solution);
+
+	vector<Fraction> isCanonical(string filename);
+	int findEnteringVar();
+	int findLeadRow(int leadColID);
+	void symplexIteration();
+	bool isEndSymplex();
+
+	int findEnteringVar(vector<Fraction>& subFunc);
+	void symplex2Iteration(pair<vector<Fraction>, Fraction>& subFunc);
+	bool isEndSymplex2(vector<Fraction>& subFunc);
+	bool isSolvedSubFunc(vector<Fraction>& subFunc);
+	
+	void symplexMethod(string filename);
+	void symplex2Method(string filename);
+	void universalSymplex(string filename);
 };
 
 void printQuit();

@@ -91,6 +91,48 @@ void SymplexInterraction::printData()
 	}
 }
 
+void SymplexInterraction::clearData()
+{
+	objFunc.clear();
+	limitsCoefs.clear();
+	limitsConstants.clear();
+	funcConst = 0;
+	vars = 0;
+	limits = 0;
+}
+
+void SymplexInterraction::isContradiction()
+{
+	if (limitsCoefs.size() != limitsConstants.size()) throw exception("Размеры вектора ограничений и правых частей должны совпадать");
+
+	for (int i = 0; i < limits - vars; i++)
+	{
+		for (int j = i + 1; j < limits - vars; j++)
+		{
+			const auto& coeffs1 = limitsCoefs[i].first;
+			const auto& coeffs2 = limitsCoefs[j].first;
+			const auto& sign1 = limitsCoefs[i].second;
+			const auto& sign2 = limitsCoefs[j].second;
+
+			if (coeffs1.size() != coeffs2.size())
+			{
+				cerr << endl << "Размеры " << i + 1 << " и " << j + 1 << " ограничений не совпадают" << endl << endl;
+				continue;
+			}
+
+			Fraction dotProduct1 = 0, dotProduct2 = 0;
+			for (int k = 0; k < coeffs1.size(); ++k) 
+			{
+				dotProduct1 += coeffs1[k] * (sign1 == "<=" ? 1 : -1);
+				dotProduct2 += coeffs2[k] * (sign2 == "<=" ? 1 : -1);
+			}
+
+			if ((sign1 == "<=" && sign2 == "<=" && dotProduct1 > dotProduct2) ||
+				(sign1 == ">=" && sign2 == ">=" && dotProduct1 < dotProduct2)) throw exception("Ограничения задачи противоречивы");
+		}
+	}
+}
+
 void SymplexInterraction::castToStandard(string filename)
 {
 	if (funcTarget)
@@ -145,7 +187,7 @@ void SymplexInterraction::castToStandard(string filename)
 		}
 	}
 
-	standardToFile(filename);
+	//standardToFile(filename);
 }
 
 void SymplexInterraction::standardToFile(string filename)
@@ -183,11 +225,105 @@ void SymplexInterraction::standardToFile(string filename)
 	else throw exception("Не удалось открыть/создать файл вывода");
 }
 
+void SymplexInterraction::standardToFile(string filename, vector<int> baseID, vector<int> rowBaseID)
+{
+	ofstream ofs(filename);
+
+	if (ofs.is_open())
+	{
+		ofs << setw(10) << "Базис\t\t";
+		for (int i = 0; i < vars; i++)
+		{
+			ofs << setw(5) << "x" << (i + 1) << "\t\t";
+		}
+		ofs << setw(10) << "Свободные члены" << endl;
+		ofs << string(100, '-') << endl;
+
+		for (int i = 0; i < limits - vars; i++)
+		{
+			ofs << setw(7) << "x" << baseID[rowBaseID[i]] + 1 << "\t\t";
+			for (int j = 0; j < limitsCoefs[i].first.size(); j++)
+			{
+				ofs << setw(5) << limitsCoefs[i].first[j] << "\t\t";
+			}
+			ofs << setw(10) << limitsConstants[i] << endl;
+		}
+		ofs << endl;
+
+		ofs << setw(10) << "f\t\t";
+		for (int i = 0; i < objFunc.size(); i++)
+		{
+			ofs << setw(5) << objFunc[i] << "\t\t";
+		}
+		ofs << setw(10) << funcConst;
+	}
+	else throw exception("Не удалось открыть/создать файл вывода");
+}
+
+void SymplexInterraction::symplex2ToFile(string filename, pair<vector<Fraction>, Fraction>& subFunc)
+{
+	ofstream ofs(filename);
+
+	if (ofs.is_open())
+	{
+		ofs << setw(10) << "Базис\t\t";
+		for (int i = 0; i < vars; i++)
+		{
+			ofs << setw(5) << "x" << (i + 1) << "\t\t";
+		}
+		ofs << setw(10) << "Свободные члены" << endl;
+		ofs << string(100, '-') << endl;
+
+		for (int i = 0; i < limits - vars; i++)
+		{
+			ofs << setw(10) << "\t\t";
+			for (int j = 0; j < limitsCoefs[i].first.size(); j++)
+			{
+				ofs << setw(5) << limitsCoefs[i].first[j] << "\t\t";
+			}
+			ofs << setw(10) << limitsConstants[i] << endl;
+		}
+		ofs << endl;
+
+		ofs << setw(10) << "f\t\t";
+		for (int i = 0; i < objFunc.size(); i++)
+		{
+			ofs << setw(5) << objFunc[i] << "\t\t";
+		}
+		ofs << setw(10) << funcConst << endl;
+
+		ofs << setw(11) << "f'\t\t";
+		for (int i = 0; i < subFunc.first.size(); i++)
+		{
+			ofs << setw(5) << subFunc.first[i] << "\t\t";
+		}
+		ofs << setw(10) << subFunc.second;
+	}
+	else throw exception("Не удалось открыть/создать файл вывода");
+}
+
+Fraction SymplexInterraction::getObjFuncValue(vector<Fraction>& solution)
+{
+	Fraction result;
+	int sizeFunc = objFunc.size();
+	int sizeSolution = solution.size();
+	if (sizeFunc != sizeSolution) throw exception("Размеры векторов целевой функции и решения не совпадают");
+
+	for (int i = 0; i < sizeFunc; i++)
+	{
+		result += objFunc[i] * solution[i];
+	}
+	result += funcConst;
+
+	return result;
+}
+
 vector<Fraction> SymplexInterraction::isCanonical(string filename)
 {
-	castToStandard(filename);
+	//castToStandard(filename);
 
 	vector<Fraction> result(vars);
+	vector<int> baseID, rowBaseID;
 
 	for (int i = 0; i < vars; i++)
 	{
@@ -206,6 +342,8 @@ vector<Fraction> SymplexInterraction::isCanonical(string filename)
 		if (coef == 1 && cnt == 1)
 		{
 			result[i] = limitsConstants[ID];
+			baseID.push_back(i);
+			rowBaseID.push_back(ID);
 		}
 	}
 
@@ -215,13 +353,33 @@ vector<Fraction> SymplexInterraction::isCanonical(string filename)
 		if (el != 0) cntNonZero++;
 	}
 
-	if (cntNonZero == limits - vars) return result;
+	for (int k = 0; k < baseID.size(); k++)
+	{
+		for (int i = 0; i < objFunc.size(); i++)
+		{
+			if (objFunc[i] != 0 && i == baseID[k])
+			{
+				Fraction coefToDelete = objFunc[i];
+				for (int j = 0; j < objFunc.size(); j++)
+				{
+					objFunc[j] -= limitsCoefs[rowBaseID[k]].first[j] * coefToDelete;
+				}
+				funcConst -= limitsConstants[rowBaseID[k]] * coefToDelete;
+			}
+		}
+	}
+
+	if ((cntNonZero == limits - vars))
+	{
+		standardToFile(filename, baseID, rowBaseID);
+		return result;
+	}
 	else return vector<Fraction>();
 }
 
 int SymplexInterraction::findEnteringVar()
 {
-	Fraction minValue = INT_MAX;
+	Fraction minValue = 1000000;
 	int ID = -1;
 	for (int i = 0; i < vars; i++)
 	{
@@ -236,7 +394,7 @@ int SymplexInterraction::findEnteringVar()
 
 int SymplexInterraction::findLeadRow(int leadColID)
 {
-	Fraction minValue = INT_MAX;
+	Fraction minValue = 1000000;
 	int ID = -1;
 	for (int i = 0; i < limits - vars; i++)
 	{
@@ -250,26 +408,20 @@ int SymplexInterraction::findLeadRow(int leadColID)
 			}
 		}
 	}
+	for (int i = 0; i < limits - vars; i++)
+	{
+		if (i != ID && limitsCoefs[i].first[leadColID] > 0)
+		{
+			Fraction temp = limitsConstants[i] / limitsCoefs[i].first[leadColID];
+			if (temp == minValue) throw exception("Ведущую строку можно выбрать не единственным образом\nF = inf");
+		}
+	}
+
 	return ID;
 }
 
-void SymplexInterraction::symplexIteration(string filename)
+void SymplexInterraction::symplexIteration()
 {
-	vector<Fraction> IFBS = isCanonical(filename);
-	if (IFBS.empty()) throw exception("Система не является канонической");
-	else
-	{
-		cout << "Система является канонической\nНДБР: ";
-		for (auto& el : IFBS)
-		{
-			cout << el << " ";
-		}
-		cout << endl;
-
-		Fraction valueFunc = getObjFuncValue(IFBS);
-		cout << "F = " << valueFunc << endl << endl;
-	}
-
 	int leadColID = findEnteringVar();
 	if (leadColID == -1) throw exception("Нельзя выбрать ведущий столбец");
 
@@ -305,18 +457,189 @@ void SymplexInterraction::symplexIteration(string filename)
 	funcConst -= limitsConstants[leadRowID] * coefToDelete;
 }
 
-Fraction SymplexInterraction::getObjFuncValue(vector<Fraction>& solution)
+bool SymplexInterraction::isEndSymplex()
 {
-	Fraction result;
-	int sizeFunc = objFunc.size();
-	int sizeSolution = solution.size();
-	if (sizeFunc != sizeSolution) throw exception("Размеры векторов целевой функции и решения не совпадают");
-
-	for (int i = 0; i < sizeFunc; i++)
+	int cntNegative = 0;
+	for (auto& el : objFunc)
 	{
-		result += objFunc[i] * solution[i];
+		if (el < 0) cntNegative++;
 	}
-	result += funcConst;
+	return cntNegative == 0;
+}
 
-	return result;
+int SymplexInterraction::findEnteringVar(vector<Fraction>& subFunc)
+{
+	Fraction minValue = 1000000;
+	int ID = -1;
+	for (int i = 0; i < vars; i++)
+	{
+		if (subFunc[i] < minValue)
+		{
+			minValue = subFunc[i];
+			ID = i;
+		}
+	}
+	return ID;
+}
+
+void SymplexInterraction::symplex2Iteration(pair<vector<Fraction>, Fraction>& subFunc)
+{
+	int leadColID = findEnteringVar(subFunc.first);
+	if (leadColID == -1) throw exception("Нельзя выбрать ведущий столбец");
+	
+	int leadRowID = findLeadRow(leadColID);
+	if (leadRowID == -1) throw exception("Нельзя выбрать ведущую строку");
+
+	Fraction coef = limitsCoefs[leadRowID].first[leadColID];
+
+	for (int i = 0; i < limitsCoefs[leadRowID].first.size(); i++)
+	{
+		limitsCoefs[leadRowID].first[i] /= coef;
+	}
+	limitsConstants[leadRowID] /= coef;
+
+	for (int i = 0; i < limits - vars; i++)
+	{
+		if (i != leadRowID)
+		{
+			Fraction coefToDelete = limitsCoefs[i].first[leadColID];
+			for (int j = 0; j < limitsCoefs[i].first.size(); j++)
+			{
+				limitsCoefs[i].first[j] -= limitsCoefs[leadRowID].first[j] * coefToDelete;
+			}
+			limitsConstants[i] -= limitsConstants[leadRowID] * coefToDelete;
+		}
+	}
+
+	Fraction coefToDelete = objFunc[leadColID];
+	for (int i = 0; i < objFunc.size(); i++)
+	{
+		objFunc[i] -= limitsCoefs[leadRowID].first[i] * coefToDelete;
+	}
+	funcConst -= limitsConstants[leadRowID] * coefToDelete;
+
+	coefToDelete = subFunc.first[leadColID];
+	for (int i = 0; i < objFunc.size(); i++)
+	{
+		subFunc.first[i] -= limitsCoefs[leadRowID].first[i] * coefToDelete;
+	}
+	subFunc.second -= limitsConstants[leadRowID] * coefToDelete;
+}
+
+bool SymplexInterraction::isEndSymplex2(vector<Fraction>& subFunc)
+{
+	int cntNegative = 0;
+	for (auto& el : subFunc)
+	{
+		if (el < 0) cntNegative++;
+	}
+	return cntNegative == 0;
+}
+
+bool SymplexInterraction::isSolvedSubFunc(vector<Fraction>& subFunc)
+{
+	int cntZero = 0;
+	for (auto& el : subFunc)
+	{
+		if (el == 0) cntZero++;
+	}
+	return cntZero == subFunc.size();
+}
+
+void SymplexInterraction::symplexMethod(string filename)
+{
+	int iteration = 1;
+	while (!isEndSymplex())
+	{
+		cout << "Итерация одноэтапного симплекс-метода " << iteration << endl;
+		symplexIteration();
+		vector<Fraction> FBS = isCanonical(filename);
+		cout << "ДБР: ";
+		for (auto& el : FBS)
+		{
+			cout << el << " ";
+		}
+		cout << endl;
+
+		Fraction valueFunc = getObjFuncValue(FBS);
+		cout << "F = " << valueFunc << endl << endl;
+		iteration++;
+	}
+}
+
+void SymplexInterraction::symplex2Method(string filename)
+{
+	pair<vector<Fraction>, Fraction> subFunc;
+	for (int i = 0; i < vars; i++)
+	{
+		Fraction el = 0;
+		for (int j = 0; j < limits - vars; j++)
+		{
+			el += limitsCoefs[j].first[i];
+		}
+		subFunc.first.push_back(el * -1);
+	}
+
+	Fraction constEl;
+	for (int i = 0; i < limits - vars; i++)
+	{
+		constEl += limitsConstants[i];
+	}
+	subFunc.second = constEl;
+
+	int iteration = 1;
+	while (!isEndSymplex2(subFunc.first))
+	{
+		cout << "Итерация двухэтапного симплекс-метода " << iteration << endl;
+		symplex2Iteration(subFunc);
+		symplex2ToFile(filename, subFunc);
+		cout << "f': ";
+		for (auto& el : subFunc.first)
+		{
+			cout << el << " ";
+		}
+		cout << "| " << subFunc.second << endl << endl;
+		iteration++;
+
+		/*vector<Fraction> FBS = isCanonical(filename);
+		for (auto& el : FBS)
+		{
+			cout << el << " ";
+		}
+		cout << endl;
+
+		Fraction valueFunc = getObjFuncValue(FBS);
+		cout << "F = " << valueFunc << endl << endl;*/	
+	}
+
+	if (!isSolvedSubFunc(subFunc.first)) throw exception("Вспомогательная функция не имеет решения");
+
+	universalSymplex(filename);
+}
+
+void SymplexInterraction::universalSymplex(string filename)
+{
+	castToStandard(filename);
+
+	vector<Fraction> IFBS = isCanonical(filename);
+	if (IFBS.empty())
+	{
+		cout << "Система не является канонической" << endl << endl;
+		symplex2Method(filename);
+		cout << endl;
+	}
+	else
+	{
+		cout << "Система является канонической\nНДБР: ";
+		for (auto& el : IFBS)
+		{
+			cout << el << " ";
+		}
+		cout << endl;
+
+		Fraction valueFunc = getObjFuncValue(IFBS);
+		cout << "F = " << valueFunc << endl << endl;
+
+		symplexMethod(filename);
+	}
 }
